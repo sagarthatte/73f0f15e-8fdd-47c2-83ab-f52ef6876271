@@ -1,7 +1,7 @@
 // src/index.js
 
 const commander = require('commander');
-const reportGenerator = require('./src/services/reportGenerator');
+const reportGenerator = require('./src/scripts/reportGenerator');
 
 commander
     .arguments('<studentId>')
