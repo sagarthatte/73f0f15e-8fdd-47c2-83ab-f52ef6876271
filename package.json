@@ -1,5 +1,6 @@
 {
   "name": "73f0f15e-8fdd-47c2-83ab-f52ef6876271",
+  "type": "module",
   "version": "1.0.0",
   "description": "ACER Coding Challenge - Reporting System",
   "main": "index.js",
@@ -10,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "commander": "^11.1.0",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "inquirer": "^9.2.12"
   }
 }
