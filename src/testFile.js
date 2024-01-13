@@ -1,6 +1,12 @@
 // Testing inquirer plugin
 
 import reportGenCLI from 'inquirer';
+import readLine from 'readline';
+
+const readline = readLine.createInterface({
+	input: process.stdin,
+	output: process.stdout
+  });
 
 const questions = [
 	{
@@ -9,12 +15,16 @@ const questions = [
 		message: 'Enter Student ID: '
 	},
 	{
-		type: 'input',
+		type: 'list',
 		name: 'reportType',
-		message: 'Choose Report Type [1 => Diagnostic, 2 => Feedback, 3 => Progress]: '
+		choices: ['Diagnostic', 'Progress', 'Feedback'],
+		default: 'Diagnostic',
+		message: 'Report to generate: '
 	}
 ];
 
-reportGenCLI.prompt(questions).then(answers => {
-	console.log('Hi, your responses are: ' + answers.studentId + ' ' + answers.reportType);
-});
+console.log('Enter the following: \n');
+readline.question('Who are you?', name => {
+	console.log(`Hey there ${name}!`);
+	readline.close();
+  });
