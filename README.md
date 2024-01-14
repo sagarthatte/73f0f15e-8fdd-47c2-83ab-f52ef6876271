@@ -12,3 +12,10 @@ ACER Coding Challenge - Reporting System
 - Script data has been added to package.json file for running the CLI.
 - Use command 'npm run reportGenerator' to run the CLI and receive prompts.
 - Alternatively, from the root directory, execute 'node src/index.js' command to achieve same outcome.
+
+# Run tests (Jest)
+- Jest package has been used to create unit tests.
+- To run the tests, execute command 'npm test' from the root directory.
+
+# Questions or Issues
+- In case of questions or issues, please contact Sagar Thatte via email: sagarthatte@gmail.com
