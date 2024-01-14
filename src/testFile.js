@@ -1,19 +1,16 @@
 // Testing inquirer plugin
 
 import reportGenCLI from 'inquirer';
-import readLine from 'readline';
 
-const readline = readLine.createInterface({
-	input: process.stdin,
-	output: process.stdout
-  });
 
-const questions = [
+const studentIdQuestion = [
 	{
 		type: 'input',
 		name: 'studentId',
 		message: 'Enter Student ID: '
-	},
+	}
+];
+const reportTypeQuestion = [
 	{
 		type: 'list',
 		name: 'reportType',
@@ -23,8 +20,13 @@ const questions = [
 	}
 ];
 
-console.log('Enter the following: \n');
-readline.question('Who are you?', name => {
-	console.log(`Hey there ${name}!`);
-	readline.close();
-  });
+console.log('test1');
+reportGenCLI.prompt(studentIdQuestion).then(answers => {
+	console.log(answers.studentId);
+});
+
+console.log('test2')
+reportGenCLI.prompt(reportTypeQuestion).then(answers => {
+	console.log(answers.reportType);
+});
+console.log('test3');
