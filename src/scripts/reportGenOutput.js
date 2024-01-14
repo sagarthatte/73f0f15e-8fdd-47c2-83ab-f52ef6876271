@@ -83,11 +83,81 @@ class ReportGenOutput {
 
 	}
 
-	generateProgressReport () {
+	generateProgressReport (thisStudent, questions, studentReponses, assessments) {
+	// testing
+	 console.log('progress report');
 	}
 
-	generateFeedbackReport () {
-		console.log('test report 2');
+	generateFeedbackReport (thisStudent, questions, studentResponses, assessments) {
+		/* Requires following data
+		* Most recent assessment
+		* count of total questions, correct answers
+		* details for wrong answers: answer chosen, right answer, hint
+		*/
+
+		let completedAssessments = [];
+
+		studentResponses.forEach(response => {
+			if (response.hasOwnProperty('completed') && response.student.id === thisStudent.id) {
+				completedAssessments.push(response);
+			}
+		});
+		// Sort completed assessments by most recent first
+		const sortedAssessments = completedAssessments.sort( function(x, y) {
+			return y.completed.localeCompare(x.completed);
+		});
+
+		// MRA => Most Recent Assessment Completed
+		let thisStudentMRAC = sortedAssessments[0];
+		// Get assessment name
+		let thisAssessment = assessments.find(assessment => assessment.id === thisStudentMRAC.assessmentId);
+		let assessmentName = thisAssessment.name;
+
+		let assessmentCompletionDateTime = moment(thisStudentMRAC.completed, 'YYYY-MM-DD HH:mm:ss').format('Do MMMM YYYY, hh:mm A');
+
+		let assessmentTotalQuestions = thisStudentMRAC.responses.length;
+
+		let assessmentTotalScore = thisStudentMRAC.results.rawScore;
+
+		// Gather details for questions with incorrect answers
+		let questionsWithIncorrectResponse = [];
+		thisStudentMRAC.responses.forEach( (qResponse) => {
+			// Add incorrect response to array
+			let matchingQuestion = questions.find(question => question.id === qResponse.questionId);
+			if (qResponse.response !== matchingQuestion.config.key) {
+				questionsWithIncorrectResponse.push({
+					'question': matchingQuestion.stem,
+					'type': matchingQuestion.type,
+					'studentResponse': matchingQuestion.config.options.find(option => option.id === qResponse.response),
+					'correctAnswer': matchingQuestion.config.options.find(option => option.id === matchingQuestion.config.key),
+					'hint': matchingQuestion.config.hint
+				});
+			}
+		});
+
+		// Create report text
+		let reportText = '\n';
+		reportText += thisStudent.firstName + ' ' + thisStudent.lastName 
+			+ ' recently completed "' + assessmentName + '" assessment on ' + assessmentCompletionDateTime + '\n'
+		;
+		
+		reportText += 'He/She got ' + assessmentTotalScore+ ' questions right out of ' + assessmentTotalQuestions;
+
+		if (questionsWithIncorrectResponse.length > 0) {
+			reportText += 'Feedback for wrong answers given below: \n\n';
+			questionsWithIncorrectResponse.forEach((thisQuestion) => {
+				reportText += 'Question: ' + thisQuestion.question + '\n';
+				reportText += 'Question Type: ' + thisQuestion.type + '\n';
+				reportText += 'Your answer: ' + thisQuestion.studentResponse.label + ' with value ' + thisQuestion.studentResponse.value + '\n';
+				reportText += 'Correct Answer: ' + thisQuestion.correctAnswer.label + ' with value ' + thisQuestion.correctAnswer.value + '\n';
+				reportText += 'Hint: ' + thisQuestion.hint + '\n';
+			})
+
+		} else {
+			reportText += 'No wrong answers found \n';
+		}
+
+		return reportText;
 	}
 }
 

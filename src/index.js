@@ -17,7 +17,7 @@ import reportGenInput from './scripts/reportGenInput.js';
 // Read json files, and json parse data
 const students = JSON.parse(fs.readFileSync('./src/data/students.json'));
 const questions = JSON.parse(fs.readFileSync('./src/data/questions.json'));
-const studentReponses = JSON.parse(fs.readFileSync('./src/data/student-responses.json'));
+const studentResponses = JSON.parse(fs.readFileSync('./src/data/student-responses.json'));
 const assessments = JSON.parse(fs.readFileSync('./src/data/assessments.json'));
 
 // Start CLI sequence
@@ -39,11 +39,11 @@ const generator  = async() => {
 		try {
 			requestedReportType = await fetchInput.requestReportType();
 			if (requestedReportType === 'Diagnostic') {
-				reportOutput = fetchReportOutput.generateDiagnosticReport(selectedStudent, questions, studentReponses, assessments);
+				reportOutput = fetchReportOutput.generateDiagnosticReport(selectedStudent, questions, studentResponses, assessments);
 			} else if (requestedReportType === 'Progress') {
-				reportOutput = fetchReportOutput.generateProgressReport();
+				reportOutput = fetchReportOutput.generateProgressReport(selectedStudent, questions, studentResponses, assessments);
 			} else if (requestedReportType === 'Feedback') {
-				reportOutput = fetchReportOutput.generateFeedbackReport();
+				reportOutput = fetchReportOutput.generateFeedbackReport(selectedStudent, questions, studentResponses, assessments);
 			}
 
 			console.log(reportOutput);
