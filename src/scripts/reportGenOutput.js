@@ -36,7 +36,7 @@ class ReportGenOutput {
 		let assessmentName = thisAssessment.name;
 
 		// Convert date time to correct format for display
-		let assessmentCompletionDateTime = moment(thisStudentMRAC.completed, 'YYYY-MM-DD HH:mm:ss').format('Do MMMM YYYY, hh:mm A');
+		let assessmentCompletionDateTime = moment(thisStudentMRAC.completed, 'DD/MM/YYYY HH:mm:ss').format('Do MMMM YYYY, hh:mm A');
 
 		let assessmentTotalQuestions = thisStudentMRAC.responses.length;
 
@@ -186,7 +186,7 @@ class ReportGenOutput {
 		let thisAssessment = assessments.find(assessment => assessment.id === thisStudentMRAC.assessmentId);
 		let assessmentName = thisAssessment.name;
 
-		let assessmentCompletionDateTime = moment(thisStudentMRAC.completed, 'YYYY-MM-DD HH:mm:ss').format('Do MMMM YYYY, hh:mm A');
+		let assessmentCompletionDateTime = moment(thisStudentMRAC.completed, 'DD/MM/YYYY HH:mm:ss').format('Do MMMM YYYY, hh:mm A');
 
 		let assessmentTotalQuestions = thisStudentMRAC.responses.length;
 
