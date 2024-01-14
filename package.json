@@ -1,24 +1,27 @@
 {
-  "name": "73f0f15e-8fdd-47c2-83ab-f52ef6876271",
-  "type": "module",
-  "version": "1.0.0",
-  "description": "ACER Coding Challenge - Reporting System",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "reportGenerator": "node ./src/index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "async": "^3.2.5",
-    "fs": "^0.0.1-security",
-    "inquirer": "^9.2.12",
-    "moment": "^2.30.1",
-    "shelljs": "^0.8.5"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
-  }
+	"name": "73f0f15e-8fdd-47c2-83ab-f52ef6876271",
+	"type": "module",
+	"version": "1.0.0",
+	"description": "ACER Coding Challenge - Reporting System",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest",
+		"reportGenerator": "node ./src/index.js"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@babel/preset-env": "^7.23.8",
+		"async": "^3.2.5",
+		"babel-jest": "^29.7.0",
+		"fs": "^0.0.1-security",
+		"inquirer": "^9.2.12",
+		"moment": "^2.30.1",
+		"shelljs": "^0.8.5",
+		"ts-jest": "^29.1.1"
+	},
+	"devDependencies": {
+		"jest": "^29.7.0"
+	}
 }
