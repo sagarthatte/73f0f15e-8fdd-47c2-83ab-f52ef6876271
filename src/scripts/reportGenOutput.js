@@ -83,9 +83,82 @@ class ReportGenOutput {
 
 	}
 
-	generateProgressReport (thisStudent, questions, studentReponses, assessments) {
-	// testing
-	 console.log('progress report');
+	generateProgressReport (thisStudent, studentReponses, assessments) {
+		/* Requires following data
+		* Total completed attempts for assessment
+		* Date of each completion, total questions, total score
+		* difference of score between oldest and newest assessment attempt
+		*/
+		// Fetch all completed assessments for selected student
+		let completedAssessments = studentReponses.filter(
+			response => 
+				response.student.id == thisStudent.id 
+				&& typeof response.completed !== 'undefined'
+		);
+
+		// Fetch completion attempts for each assessment type (id)
+		let completedAttempts = [];
+		completedAssessments.forEach( (thisAssessment) => {
+			let idx = completedAttempts.findIndex(type => type.assessmentId === thisAssessment.assessmentId);
+
+			// If entry exists for assessment type, increment, else create new
+			if (idx !== -1) {
+				++completedAttempts[idx].totalAttempts;
+			} else {
+				completedAttempts.push({
+					'assessmentId': thisAssessment.assessmentId,
+					'assessmentName': assessments.find(assessment => assessment.id = thisAssessment.assessmentId).name,
+					'totalAttempts': 1,
+					'oldestTotal': null,
+					'newestTotal': null,
+					'totalQuestions': thisAssessment.responses.length,
+					'attemptSpecificData': []
+				});
+				idx = completedAttempts.findIndex(type => type.assessmentId === thisAssessment.assessmentId);
+			}
+			// Need respective score and completion date for each attempt of each type.
+			completedAttempts[idx].attemptSpecificData.push({
+				'completionDate': moment(thisAssessment.completed, 'DD/MM/YYYY HH:mm:ss').format('Do MMMM YYYY, hh:mm A'),
+				'totalScore': thisAssessment.results.rawScore
+			});
+		});
+
+		// Logic to fetch oldest and newest score for each type of assessment
+		completedAttempts.forEach( (attempt) => {
+			// Get assessments by oldest first
+			const thisAttemptSorted = attempt.attemptSpecificData.sort( function(x, y) {
+				return x.completionDate.localeCompare(y.completionDate);
+			});
+			console.log(thisAttemptSorted[0].totalScore);
+			console.log(thisAttemptSorted[thisAttemptSorted.length - 1].totalScore);
+			attempt.oldestTotal = thisAttemptSorted[0].totalScore;
+			attempt.newestTotal = thisAttemptSorted[thisAttemptSorted.length - 1].totalScore;
+		})
+
+		// Generate report data
+		let reportText = '\n';
+
+		completedAttempts.forEach((attempt) => {
+			reportText += thisStudent.firstName + ' ' + thisStudent.lastName + ' has completed ' + attempt.assessmentName + ' assessment '
+				+ attempt.totalAttempts + ' times in total. Dates and raw scores given below: \n'
+			;
+			
+			attempt.attemptSpecificData.forEach( (thisAttempt) => {
+				reportText += 'Date: ' + thisAttempt.completionDate + ', Raw Score: ' + thisAttempt.totalScore + ' out of ' + attempt.totalQuestions + '\n';
+			});
+			reportText += '\n';
+			let scoreDifference = attempt.newestTotal - attempt.oldestTotal;
+			reportText += thisStudent.firstName + ' ' + thisStudent.lastName + ' got ' + scoreDifference;
+			if (scoreDifference > 0) {
+				reportText += ' more';
+			} else {
+				reportText += ' less';
+			}
+			reportText += ' correct in recent completed assessment than the oldest.';
+		});
+		
+		return reportText;
+
 	}
 
 	generateFeedbackReport (thisStudent, questions, studentResponses, assessments) {

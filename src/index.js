@@ -41,7 +41,7 @@ const generator  = async() => {
 			if (requestedReportType === 'Diagnostic') {
 				reportOutput = fetchReportOutput.generateDiagnosticReport(selectedStudent, questions, studentResponses, assessments);
 			} else if (requestedReportType === 'Progress') {
-				reportOutput = fetchReportOutput.generateProgressReport(selectedStudent, questions, studentResponses, assessments);
+				reportOutput = fetchReportOutput.generateProgressReport(selectedStudent, studentResponses, assessments);
 			} else if (requestedReportType === 'Feedback') {
 				reportOutput = fetchReportOutput.generateFeedbackReport(selectedStudent, questions, studentResponses, assessments);
 			}
