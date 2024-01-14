@@ -1,7 +1,6 @@
 // /src/scripts/reportInput.js
 
 import reportQuestions from 'inquirer';
-import { error } from 'shelljs';
 
 const studentIdQuestion = [
     {
@@ -24,30 +23,39 @@ const reportTypeQuestion = [
         'default': 'Diagnostic'
     }
 ];
-
-requestStudentById = (students) => {
-    return new Promise((resolve, reject) => {
-        reportQuestions.prompt(studentIdQuestion).then(response => {
-            selectedStudent = students.find(student => student.id === response.studentId);
-            if (selectedStudent === 'undefined') {
-                reject('Student ID "' + response.studentId + '" does not exist');
-            } else {
-                resolve(selectedStudent);
-            }
+class ReportGenInput {
+    constructor() {
+        // Not needed at this stage, may need to expand at some point in future
+    }   
+    
+    requestStudentById (students) {
+        return new Promise((resolve, reject) => {
+            reportQuestions.prompt(studentIdQuestion).then(response => {
+                let selectedStudent = students.find(student => student.id === response.studentId);
+                if (selectedStudent === 'undefined') {
+                    reject('Student ID "' + response.studentId + '" does not exist');
+                } else {
+                    resolve(selectedStudent);
+                }
+            });
         });
-    });
+    }
+    
+    requestReportType () {
+        return new Promise((resolve,reject) => {
+            reportQuestions.prompt(reportTypeQuestion).then(response => {
+                let selectedReportType = response.reportType;
+    
+                if (!['Diagnostic', 'Feedback', 'Progress'].includes(selectedReportType)) {
+                    reject('Report Type not found. Please contact developer');
+                } else {
+                    resolve(selectedReportType);
+                }
+            });
+        });
+    }
 }
 
-requestReportType = () => {
-    return new Promise((resolve,reject) => {
-        reportQuestions.prompt(reportTypeQuestion).then(response => {
-            selectedReportType = response.reportType;
+export default ReportGenInput;
 
-            if (!['Diagnostic', 'Feedback', 'Progress'].includes(selectedReportType)) {
-                reject('Report Type not found. Please contact developer');
-            } else {
-                resolve(selectedReportType);
-            }
-        });
-    });
-}
+

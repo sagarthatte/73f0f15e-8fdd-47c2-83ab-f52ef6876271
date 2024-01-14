@@ -10,8 +10,8 @@
 // Imports
 import fs from 'fs';
 import Student from './models/student.js';
-import reportGenOuput from './models/reportGenOutput.js';
-import reportInput from './scripts/reportGenInput.js';
+import reportGenOutput from './scripts/reportGenOutput.js';
+import reportGenInput from './scripts/reportGenInput.js';
 
 
 // Read json files, and json parse data
@@ -27,21 +27,32 @@ console.log('Enter the following: \n');
 let inputStudent = null;
 let requestedReportType = null;
 let selectedStudent = null;
+let reportOutput = '';
+let fetchInput = new reportGenInput();
+let fetchReportOutput = new reportGenOutput();
 // Main method to fetch input and generate output report
-const index  = async() => {
+const generator  = async() => {
 	try {
-		inputStudent = await reportInput.requestedStudentById(students);
+		inputStudent = await fetchInput.requestStudentById(students);
 		selectedStudent = new Student(inputStudent);
+	
 		try {
-			requestedReportType = await reportInput.requestReportType();
-
+			requestedReportType = await fetchInput.requestReportType();
 			if (requestedReportType === 'Diagnostic') {
-				reportGenOuput.generateDiagnosticReport();
+				reportOutput = fetchReportOutput.generateDiagnosticReport(selectedStudent, questions, studentReponses, assessments);
 			} else if (requestedReportType === 'Progress') {
-				reportGenOutput.generateProgressReport();
+				reportOutput = fetchReportOutput.generateProgressReport();
 			} else if (requestedReportType === 'Feedback') {
-				reportGenOutput.generateFeedbackReport();
+				reportOutput = fetchReportOutput.generateFeedbackReport();
 			}
+
+			console.log(reportOutput);
+		} catch (err) {
+			console.error(err);
 		}
+	} catch (err) {
+		console.error(err);
 	}
 }
+
+generator();
